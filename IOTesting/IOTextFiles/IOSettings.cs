@@ -13,14 +13,16 @@ namespace IOTextFiles
 
 		public string getPath ()
 		{
-			string _path = System.IO.Path.Combine ( AppDomain.CurrentDomain.BaseDirectory, "test.txt" );
+			//Програма\Settings\settings.txt
+			string _path = System.IO.Path.Combine ( AppDomain.CurrentDomain.BaseDirectory, "Settings" );
+			_path = System.IO.Path.Combine (_path, "settings.txt" );
 
 			//Други видове директории
-			string _user = Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData);
-			Console.WriteLine ( _user );
+			//string _user = Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData);
+			//Console.WriteLine ( _user );
 
-			string _desktop = Environment.GetFolderPath( Environment.SpecialFolder.Desktop);
-			Console.WriteLine (_desktop);
+			//string _desktop = Environment.GetFolderPath( Environment.SpecialFolder.Desktop);
+			//Console.WriteLine (_desktop);
 
 			return _path;
 		}
@@ -47,6 +49,8 @@ namespace IOTextFiles
 		{
 			try
 			{
+				iniSettings ();
+
 				string _temp = "", _filePath = getPath ();
 
 				if ( System.IO.File.Exists ( _filePath) )	//Проверка дали пътят е валиден
@@ -59,8 +63,9 @@ namespace IOTextFiles
 					{
 						_stable.stable[i] = _table[i];
 					}
+
 				}else{
-					Console.WriteLine ("Не е намерен такъв път.");
+					
 					return false;
 				}
 
@@ -69,6 +74,32 @@ namespace IOTextFiles
 			}
 
 			return false;
+		}
+
+		private void iniSettings ()
+		{
+			try
+			{
+				bool _fileExist = System.IO.File.Exists ( getPath () );
+
+				if ( !_fileExist )
+				{
+					string _directory = System.IO.Path.GetDirectoryName ( getPath () );
+
+					//Застраховаме се, че директорията съществува
+					if ( !System.IO.Directory.Exists ( _directory ) )
+					{
+						System.IO.Directory.CreateDirectory ( _directory );
+					}
+
+					//Запаметяваме съдържанието на файла
+					save ();
+
+				}
+
+
+			}catch{
+			}
 		}
 	}
 }
